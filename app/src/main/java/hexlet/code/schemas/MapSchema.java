@@ -2,28 +2,38 @@ package hexlet.code.schemas;
 
 import java.util.Map;
 
-public class MapSchema extends BaseSchema {
+public class MapSchema<K, V> extends BaseSchema<Map<K, V>> {
+
     public MapSchema() {
         addValidator(value -> value instanceof Map<?, ?>);
     }
 
-    public final void required() {
+    public final MapSchema<K, V> required() {
         setRequired(true);
+        return this; // поддержка цепочки вызовов
     }
 
-    public final void sizeOf(int count) {
+    public final MapSchema<K, V> sizeof(int count) {
         addValidator(value -> ((Map<?, ?>) value).size() == count);
+        return this; // поддержка цепочки вызовов
     }
 
-    public final void shape(Map<String, BaseSchema> map) {
+    public final MapSchema<K, V> shape(Map<String, BaseSchema<V>> map) {
         addValidator(value -> {
-            for (Map.Entry<String, BaseSchema> entry : map.entrySet()) {
+            if (!(value instanceof Map)) {
+                return false;
+            }
+            Map<?, ?> valueMap = (Map<?, ?>) value;
+            for (Map.Entry<String, BaseSchema<V>> entry : map.entrySet()) {
                 String key = entry.getKey();
-                if (!(entry.getValue().isValid(((Map<?, ?>) value).getOrDefault(key, null)))) {
+                // Проверка с приведением по ключу
+                if (!(entry.getValue().isValid(valueMap.getOrDefault(key, null)))) {
                     return false;
                 }
             }
             return true;
         });
+        return this; // поддержка цепочки вызовов
     }
 }
+

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 
-public abstract class BaseSchema {
+public abstract class BaseSchema<T> {
     protected List<Predicate<Object>> validators = new ArrayList<>();
     protected boolean isRequired = false;
 

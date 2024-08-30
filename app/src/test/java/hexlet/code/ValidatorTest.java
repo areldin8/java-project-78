@@ -96,7 +96,7 @@ public class ValidatorTest {
         data.put("key1", "value1");
         Assertions.assertTrue(mapSchema.isValid(data)); // true
 
-        mapSchema.sizeOf(2);
+        mapSchema.sizeof(2);
 
         Assertions.assertFalse(mapSchema.isValid(data));  // false
         data.put("key2", "value2");

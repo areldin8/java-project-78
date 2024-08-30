@@ -1,6 +1,6 @@
 package hexlet.code.schemas;
 
-public class NumberSchema extends BaseSchema {
+public class NumberSchema extends BaseSchema<Double> {
     public NumberSchema() {
         addValidator(value -> value instanceof Number);
     }
