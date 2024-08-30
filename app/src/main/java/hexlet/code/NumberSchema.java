@@ -1,40 +1,27 @@
 package hexlet.code;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Predicate;
+public class NumberSchema extends BaseSchema {
+    public NumberSchema() {
+        addValidator(value -> value instanceof Number);
+    }
 
-class NumberSchema extends BaseSchema<Number> {
-    private boolean isPositive = false;
-    private Number minValue = null;
-    private Number maxValue = null;
-
-    public NumberSchema positive() {
-        isPositive = true;
-        addRule(value -> value instanceof Number && ((Number) value).doubleValue() > 0);
+    public final NumberSchema required() {
+        setRequired(true);
         return this;
     }
 
-    public NumberSchema range(Number min, Number max) {
-        minValue = min;
-        maxValue = max;
-        addRule(value -> value instanceof Number &&
-                ((Number) value).doubleValue() >= min.doubleValue() &&
-                ((Number) value).doubleValue() <= max.doubleValue());
+    public final NumberSchema positive() {
+        addValidator(value -> ((Number) value).doubleValue() > 0);
         return this;
     }
 
-    @Override
-    public boolean isValid(Number value) {
-        if (!super.isValid(value)) {
-            return false;
-        }
-
-        // Check positive rule separately, as it's not general
-        if (isPositive && (value instanceof Number && ((Number) value).doubleValue() <= 0)) {
-            return false;
-        }
-
-        return true;
+    public final NumberSchema range(double lowRange, double highRange) {
+        addValidator(value -> {
+            double numberValue = ((Number) value).doubleValue();
+            return numberValue >= lowRange && numberValue <= highRange;
+        });
+        return this;  // Поддержка цепочки вызовов
     }
 }
+
+

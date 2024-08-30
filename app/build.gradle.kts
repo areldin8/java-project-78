@@ -1,6 +1,7 @@
 plugins {
     id("java")
     id("io.freefair.lombok") version "8.4"
+    id ("com.github.mrsarm.jshell.plugin") version "1.2.1"
     application
     checkstyle
     jacoco
@@ -22,6 +23,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("org.apache.commons:commons-collections4:4.4")
+    testImplementation("org.assertj:assertj-core:3.22.0")
 }
 
 tasks.test {
