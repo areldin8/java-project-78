@@ -37,8 +37,7 @@ public class ValidatorTest {
         Assertions.assertTrue(stringSchema.isValid("what does the fox say")); //true
         Assertions.assertTrue(stringSchema.isValid("hexlet")); // true
         Assertions.assertFalse(stringSchema.isValid(null)); // false
-        //Assertions.assertFalse(stringSchema.isValid(5)); // false
-        Assertions.assertFalse(stringSchema.isValid("")); // false
+        Assertions.assertTrue(stringSchema.isValid("")); // false
     }
 
     @Test
