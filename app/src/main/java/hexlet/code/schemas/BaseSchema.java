@@ -12,11 +12,11 @@ public abstract class BaseSchema<T> {
 
     private final Map<String, Predicate<Object>> validationRules = new HashMap<>();
 
-    protected void addValidationRule(String checkType, Predicate<Object> validationPredicate) {
+    protected final void addValidationRule(String checkType, Predicate<Object> validationPredicate) {
         this.validationRules.put(checkType, validationPredicate);
     }
 
-    public boolean isValid(Object object) {
+    public final boolean isValid(Object object) {
         return validationRules.values().stream().allMatch(predicate -> predicate.test(object));
     }
 }
