@@ -1,39 +1,31 @@
 package hexlet.code.schemas;
 
 import java.util.Map;
+import java.util.Objects;
 
-public class MapSchema<K, V> extends BaseSchema<Map<K, V>> {
+public final class MapSchema<K, V> extends BaseSchema<Map<K, V>> {
 
-    public MapSchema() {
-        addValidator(value -> value instanceof Map<?, ?>);
+    public MapSchema<K, V> required() {
+        super.addValidationRule("required", Objects::nonNull);
+        return this;
     }
 
-    public final MapSchema<K, V> required() {
-        setRequired(true);
-        return this; // поддержка цепочки вызовов
+    public MapSchema<K, V> sizeof(int size) {
+        super.addValidationRule("sizeof",
+                value -> ((Map<?, ?>) value).size() == size);
+        return this;
     }
 
-    public final MapSchema<K, V> sizeof(int count) {
-        addValidator(value -> ((Map<?, ?>) value).size() == count);
-        return this; // поддержка цепочки вызовов
-    }
-
-    public final MapSchema<K, V> shape(Map<String, BaseSchema<V>> map) {
-        addValidator(value -> {
-            if (!(value instanceof Map)) {
-                return false;
-            }
-            Map<?, ?> valueMap = (Map<?, ?>) value;
-            for (Map.Entry<String, BaseSchema<V>> entry : map.entrySet()) {
-                String key = entry.getKey();
-                // Проверка с приведением по ключу
-                if (!(entry.getValue().isValid(valueMap.getOrDefault(key, null)))) {
-                    return false;
-                }
-            }
-            return true;
-        });
-        return this; // поддержка цепочки вызовов
+    public MapSchema<K, V> shape(Map<K, BaseSchema<V>> schemas) {
+        super.addValidationRule("shape",
+                value -> schemas.entrySet().stream().allMatch(item -> {
+                    Object object = ((Map<?, ?>) value).get(item.getKey());
+                    return item.getValue().isValid(object);
+                }));
+        return this;
     }
 }
+
+
+
 

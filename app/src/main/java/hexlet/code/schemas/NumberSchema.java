@@ -1,27 +1,29 @@
 package hexlet.code.schemas;
 
-public class NumberSchema extends BaseSchema<Double> {
-    public NumberSchema() {
-        addValidator(value -> value instanceof Number);
-    }
 
-    public final NumberSchema required() {
-        setRequired(true);
+import java.util.Objects;
+
+public final class NumberSchema extends BaseSchema<Number> {
+
+    public NumberSchema required() {
+        super.addValidationRule("required",
+                Objects::nonNull);
         return this;
     }
 
-    public final NumberSchema positive() {
-        addValidator(value -> ((Number) value).doubleValue() > 0);
+    public NumberSchema positive() {
+        super.addValidationRule("positive",
+                value -> value == null || ((Integer) value) > 0);
         return this;
     }
 
-    public final NumberSchema range(double lowRange, double highRange) {
-        addValidator(value -> {
-            double numberValue = ((Number) value).doubleValue();
-            return numberValue >= lowRange && numberValue <= highRange;
-        });
-        return this;  // Поддержка цепочки вызовов
+    public NumberSchema range(int lowRange, int highRange) {
+        super.addValidationRule("range",
+                value -> value != null && ((Integer) value) >= lowRange && ((Integer) value) <= highRange);
+        return this;
     }
 }
+
+
 
 
