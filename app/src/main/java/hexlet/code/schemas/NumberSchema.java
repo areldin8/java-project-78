@@ -3,7 +3,7 @@ package hexlet.code.schemas;
 
 import java.util.Objects;
 
-public final class NumberSchema extends BaseSchema<Number> {
+public final class NumberSchema extends BaseSchema<Integer> {
 
     public NumberSchema required() {
         super.addValidationRule("required",
@@ -23,6 +23,8 @@ public final class NumberSchema extends BaseSchema<Number> {
         return this;
     }
 }
+
+
 
 
 
