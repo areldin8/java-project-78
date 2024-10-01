@@ -9,52 +9,44 @@ public class NumberSchemaTest {
 
     @Test
     public void requiredValidationTests() {
-
-        Validator v = new Validator();
+        var v = new Validator();
         var testSchema = v.number();
 
-        assertTrue(testSchema.required().isValid(5));
         assertFalse(testSchema.required().isValid(null));
-        assertTrue(testSchema.required().isValid(0));
-        assertTrue(testSchema.required().positive().isValid(5));
+        assertTrue(testSchema.required().isValid(5));
     }
-
 
     @Test
     public void positiveValidationTests() {
-
-        Validator v = new Validator();
+        var v = new Validator();
         var testSchema = v.number();
 
         assertTrue(testSchema.positive().isValid(5));
         assertFalse(testSchema.positive().isValid(0));
-        assertFalse(testSchema.positive().isValid(-10));
-        assertTrue(testSchema.required().positive().isValid(10));
+        assertFalse(testSchema.positive().isValid(-5));
     }
-
 
     @Test
     public void rangeValidationTests() {
-
-        Validator v = new Validator();
+        var v = new Validator();
         var testSchema = v.number();
 
-        assertTrue(testSchema.range(1, 10).isValid(5));
+        assertTrue(testSchema.range(1, 10).isValid(4));
         assertTrue(testSchema.range(0, 5).isValid(0));
         assertTrue(testSchema.range(0, 5).isValid(5));
-        assertTrue(testSchema.range(10, 20).range(15, 25).isValid(18));
+        assertFalse(testSchema.range(5, 10).isValid(3));
+        assertFalse(testSchema.range(5, 10).isValid(15));
+        assertTrue(testSchema.range(-15, 0).isValid(-4));
     }
-
 
     @Test
     public void combinedValidationTests() {
-
-        Validator v = new Validator();
+        var v = new Validator();
         var testSchema = v.number();
 
-        assertTrue(testSchema.required().positive().range(1, 10).isValid(5));
-        assertFalse(testSchema.required().positive().isValid(0));
-        assertFalse(testSchema.required().range(1, 10).isValid(-1));
-        assertTrue(testSchema.required().positive().range(1, 10).isValid(8));
+        assertTrue(testSchema.required().positive().range(0, 4).
+                range(15, 20).isValid(17));
     }
 }
+
+

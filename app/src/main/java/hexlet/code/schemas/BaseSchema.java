@@ -1,9 +1,10 @@
 package hexlet.code.schemas;
 
 import java.util.HashMap;
-
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Predicate;
+
 
 
 public abstract class BaseSchema<T> {
@@ -19,7 +20,14 @@ public abstract class BaseSchema<T> {
                 .stream()
                 .allMatch(predicate -> predicate.test((T) object));
     }
+
+    public BaseSchema<T> required() {
+        addValidationRule("required", Objects::nonNull);
+        return this;
+
+    }
 }
+
 
 
 

@@ -10,55 +10,45 @@ public class StringSchemaTest {
 
     @Test
     public void minLengthValidationTests() {
-
-        Validator v = new Validator();
+        var v = new Validator();
         var testSchema = v.string();
 
         assertTrue(testSchema.minLength(0).isValid(""));
-        assertTrue(testSchema.minLength(1).isValid("a"));
-        assertTrue(testSchema.minLength(3).isValid("abc"));
-        assertTrue(testSchema.minLength(2).minLength(5).isValid("abcde"));
+        assertTrue(testSchema.minLength(1).isValid("abc"));
+        assertTrue(testSchema.minLength(3).isValid("adc"));
+        assertFalse(testSchema.minLength(10).isValid("dgf"));
+    }
+
+    @Test
+    public void containsValidationTests() {
+        var v = new Validator();
+        var testSchema = v.string();
+
+        assertTrue(testSchema.contains("qwe").isValid("qwer"));
+        assertTrue(testSchema.contains("").isValid(""));
+        assertFalse(testSchema.contains("ac").isValid("cap"));
     }
 
     @Test
     public void requiredValidationTests() {
-
-        Validator v = new Validator();
+        var v = new Validator();
         var testSchema = v.string();
 
-        assertFalse(testSchema.required().isValid(null));
         assertFalse(testSchema.required().isValid(""));
-        assertTrue(testSchema.required().isValid("valid"));
-        assertTrue(testSchema.required().minLength(2).isValid("valid string"));
+        assertFalse(testSchema.required().isValid(null));
+        assertTrue(testSchema.required().isValid("abc"));
     }
 
     @Test
-
-    public void containsValidationTests() {
-
-        Validator v = new Validator();
-        var testSchema = v.string();
-
-        assertTrue(testSchema.contains("a").isValid("abc"));
-        assertTrue(testSchema.contains("b").isValid("bcd"));
-        assertTrue(testSchema.contains("").isValid("anything"));
-        assertTrue(testSchema.contains("x").contains("y").isValid("xyz"));
-
-    }
-
-    @Test
-
     public void combinedValidationTests() {
-
-        Validator v = new Validator();
+        var v = new Validator();
         var testSchema = v.string();
 
-        assertTrue(testSchema.required().minLength(5).contains("e").isValid("abcdef"));
-        assertFalse(testSchema.required().minLength(10).isValid("short"));
-        assertFalse(testSchema.required().contains("hello").isValid("hi"));
-        assertTrue(testSchema.required().minLength(3).contains("x").isValid("xyzabc"));
+        assertTrue(testSchema.required().minLength(10).minLength(1)
+                .contains("x").contains("qwe").isValid("qwerty"));
     }
 }
+
 
 
 
