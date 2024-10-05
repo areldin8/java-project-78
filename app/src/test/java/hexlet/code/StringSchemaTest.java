@@ -17,6 +17,8 @@ public class StringSchemaTest {
         assertTrue(testSchema.minLength(1).isValid("abc"));
         assertTrue(testSchema.minLength(3).isValid("adc"));
         assertFalse(testSchema.minLength(10).isValid("dgf"));
+        assertFalse(testSchema.minLength(5).isValid("abc"));
+        assertFalse(testSchema.minLength(5).isValid(""));
     }
 
     @Test
@@ -27,6 +29,8 @@ public class StringSchemaTest {
         assertTrue(testSchema.contains("qwe").isValid("qwer"));
         assertTrue(testSchema.contains("").isValid(""));
         assertFalse(testSchema.contains("ac").isValid("cap"));
+        assertFalse(testSchema.contains("xyz").isValid("abc"));
+        assertFalse(testSchema.contains("abc").isValid(""));
     }
 
     @Test
@@ -37,6 +41,7 @@ public class StringSchemaTest {
         assertFalse(testSchema.required().isValid(""));
         assertFalse(testSchema.required().isValid(null));
         assertTrue(testSchema.required().isValid("abc"));
+
     }
 
     @Test
@@ -46,8 +51,11 @@ public class StringSchemaTest {
 
         assertTrue(testSchema.required().minLength(10).minLength(1)
                 .contains("x").contains("qwe").isValid("qwerty"));
+        assertFalse(testSchema.required().minLength(10).minLength(1)
+                .contains("x").contains("qwe").isValid("abc"));
     }
 }
+
 
 
 

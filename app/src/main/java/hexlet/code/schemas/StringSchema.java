@@ -3,7 +3,6 @@ package hexlet.code.schemas;
 
 public final class StringSchema extends BaseSchema<String> {
 
-
     public StringSchema required() {
         super.addValidationRule("required", value -> value != null && !value.isEmpty());
         return this;
@@ -19,7 +18,6 @@ public final class StringSchema extends BaseSchema<String> {
         return this;
     }
 }
-
 
 
 
