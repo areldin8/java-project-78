@@ -1,5 +1,6 @@
 package hexlet.code;
 
+import hexlet.code.schemas.StringSchema;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -8,10 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class StringSchemaTest {
 
+    private final Validator validator = new Validator();
+
     @Test
     public void minLengthValidationTests() {
-        var v = new Validator();
-        var testSchema = v.string();
+        StringSchema testSchema = validator.string();
 
         assertTrue(testSchema.minLength(0).isValid(""));
         assertTrue(testSchema.minLength(1).isValid("abc"));
@@ -23,8 +25,7 @@ public class StringSchemaTest {
 
     @Test
     public void containsValidationTests() {
-        var v = new Validator();
-        var testSchema = v.string();
+        StringSchema testSchema = validator.string();
 
         assertTrue(testSchema.contains("qwe").isValid("qwer"));
         assertTrue(testSchema.contains("").isValid(""));
@@ -35,8 +36,7 @@ public class StringSchemaTest {
 
     @Test
     public void requiredValidationTests() {
-        var v = new Validator();
-        var testSchema = v.string();
+        StringSchema testSchema = validator.string();
 
         assertFalse(testSchema.required().isValid(""));
         assertFalse(testSchema.required().isValid(null));
@@ -46,8 +46,7 @@ public class StringSchemaTest {
 
     @Test
     public void combinedValidationTests() {
-        var v = new Validator();
-        var testSchema = v.string();
+        StringSchema testSchema = validator.string();
 
         assertTrue(testSchema.required().minLength(10).minLength(1)
                 .contains("x").contains("qwe").isValid("qwerty"));
@@ -55,7 +54,6 @@ public class StringSchemaTest {
                 .contains("x").contains("qwe").isValid("abc"));
     }
 }
-
 
 
 

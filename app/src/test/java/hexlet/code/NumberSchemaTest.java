@@ -1,5 +1,6 @@
 package hexlet.code;
 
+import hexlet.code.schemas.NumberSchema;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -7,45 +8,47 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class NumberSchemaTest {
 
-    @Test
-    public void requiredValidationTests() {
-        var v = new Validator();
-        var testSchema = v.number();
+    private final Validator validator = new Validator();
 
-        assertFalse(testSchema.required().isValid(null));
-        assertTrue(testSchema.required().isValid(5));
+    @Test
+    public void requiredValidationTest() {
+        NumberSchema numberSchema = validator.number();
+        assertTrue(numberSchema.isValid(null));
+        assertFalse(numberSchema.required().isValid(null));
     }
 
     @Test
     public void positiveValidationTests() {
-        var v = new Validator();
-        var testSchema = v.number();
-
-        assertTrue(testSchema.positive().isValid(5));
-        assertFalse(testSchema.positive().isValid(0));
-        assertFalse(testSchema.positive().isValid(-5));
+        NumberSchema numberSchema = validator.number();
+        var positiveSchema = numberSchema.positive();
+        assertTrue(positiveSchema.isValid(null));
+        assertTrue(positiveSchema.isValid(5));
+        assertFalse(positiveSchema.isValid(0));
     }
 
     @Test
     public void rangeValidationTests() {
-        var v = new Validator();
-        var testSchema = v.number();
-
-        assertTrue(testSchema.range(1, 10).isValid(4));
-        assertTrue(testSchema.range(0, 5).isValid(0));
-        assertTrue(testSchema.range(0, 5).isValid(5));
-        assertFalse(testSchema.range(5, 10).isValid(3));
-        assertFalse(testSchema.range(5, 10).isValid(15));
-        assertTrue(testSchema.range(-15, 0).isValid(-4));
+        NumberSchema numberSchema = validator.number();
+        var inRangeSchema = numberSchema.range(5, 10);
+        assertTrue(inRangeSchema.isValid(null));
+        assertTrue(inRangeSchema.isValid(5));
+        assertTrue(inRangeSchema.isValid(10));
+        assertFalse(inRangeSchema.isValid(4));
+        assertFalse(inRangeSchema.isValid(11));
     }
 
     @Test
-    public void combinedValidationTests() {
-        var v = new Validator();
-        var testSchema = v.number();
-
-        assertTrue(testSchema.required().positive().range(0, 4).
-                range(15, 20).isValid(17));
+    public void combinedValidationTest() {
+        NumberSchema numberSchema = validator.number();
+        NumberSchema actual = numberSchema.positive();
+        assertTrue(actual.isValid(null));
+        actual.required();
+        assertFalse(actual.isValid(null));
+        assertFalse(actual.isValid(-10));
+        assertTrue(actual.isValid(10));
+        actual.range(-5, 7);
+        assertFalse(actual.isValid(-4));
+        assertTrue(actual.isValid(6));
     }
 }
 
