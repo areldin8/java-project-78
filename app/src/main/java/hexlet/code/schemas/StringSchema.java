@@ -3,6 +3,7 @@ package hexlet.code.schemas;
 
 public final class StringSchema extends BaseSchema<String> {
 
+    @Override
     public StringSchema required() {
         super.addValidationRule("required", value -> value != null && !value.isEmpty());
         return this;
